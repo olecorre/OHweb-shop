@@ -187,7 +187,8 @@ class ManufacturerCore extends ObjectModel
             $sql_groups = '';
             if (!$all_group) {
                 $groups = FrontController::getCurrentCustomerGroups();
-                $sql_groups = (count($groups) ? 'IN ('.implode(',', $groups).')' : '= 1');
+                empty($groups) && ($groups = array((int)Configuration::get('PS_UNIDENTIFIED_GROUP')));
+                $sql_groups = 'IN ('.implode(',', $groups).')';
             }
 
             $results = Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS('

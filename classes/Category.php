@@ -642,7 +642,8 @@ class CategoryCore extends ObjectModel
         if (Group::isFeatureActive()) {
             $sql_groups_join = 'LEFT JOIN `'._DB_PREFIX_.'category_group` cg ON (cg.`id_category` = c.`id_category`)';
             $groups = FrontController::getCurrentCustomerGroups();
-            $sql_groups_where = 'AND cg.`id_group` '.(count($groups) ? 'IN ('.implode(',', $groups).')' : '='.(int)Group::getCurrent()->id);
+            empty($groups) && ($groups = array((int)Configuration::get('PS_UNIDENTIFIED_GROUP')));
+            $sql_groups_where = 'AND cg.`id_group` IN ('.implode(',', $groups).')';
         }
 
         $result = Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS('

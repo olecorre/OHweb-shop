@@ -2289,6 +2289,7 @@ class ProductCore extends ObjectModel
         $sql_groups = '';
         if (Group::isFeatureActive()) {
             $groups = FrontController::getCurrentCustomerGroups();
+            empty($groups) && ($groups = array((int)Configuration::get('PS_UNIDENTIFIED_GROUP')));
             $sql_groups = ' AND EXISTS(SELECT 1 FROM `'._DB_PREFIX_.'category_product` cp
 				JOIN `'._DB_PREFIX_.'category_group` cg ON (cp.id_category = cg.id_category AND cg.`id_group` IN ('.implode(',', $groups).'))
 				WHERE cp.`id_product` = p.`id_product`)';
@@ -2335,6 +2336,7 @@ class ProductCore extends ObjectModel
         $sql->where('product_shop.`date_add` > "'.date('Y-m-d', strtotime('-'.(Configuration::get('PS_NB_DAYS_NEW_PRODUCT') ? (int)Configuration::get('PS_NB_DAYS_NEW_PRODUCT') : 20).' DAY')).'"');
         if (Group::isFeatureActive()) {
             $groups = FrontController::getCurrentCustomerGroups();
+            empty($groups) && ($groups = array((int)Configuration::get('PS_UNIDENTIFIED_GROUP')));
             $sql->where('EXISTS(SELECT 1 FROM `'._DB_PREFIX_.'category_product` cp
 				JOIN `'._DB_PREFIX_.'category_group` cg ON (cp.id_category = cg.id_category AND cg.`id_group` IN ('.implode(',', $groups).'))
 				WHERE cp.`id_product` = p.`id_product`)');
@@ -2423,6 +2425,7 @@ class ProductCore extends ObjectModel
             }
 
             $groups = FrontController::getCurrentCustomerGroups();
+            empty($groups) && ($groups = array((int)Configuration::get('PS_UNIDENTIFIED_GROUP')));
             $sql_groups = ' AND EXISTS(SELECT 1 FROM `'._DB_PREFIX_.'category_product` cp
 				JOIN `'._DB_PREFIX_.'category_group` cg ON (cp.id_category = cg.id_category AND cg.`id_group` IN ('.implode(',', $groups).'))
 				WHERE cp.`id_product` = p.`id_product`)';
